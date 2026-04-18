@@ -1,11 +1,11 @@
 // pages/api/claude.js
-// ── 서버사이드 프록시: API 키가 브라우저에 절대 노출되지 않음 ──
+// ?�?� ?�버?�이???�록?? API ?��? 브라?��????��? ?�출?��? ?�음 ?�?�
 
 export default async function handler(req, res) {
   if (req.method !== "POST") return res.status(405).end();
 
   const { system, user, tokens = 4000 } = req.body;
-  if (!system || !user) return res.status(400).json({ error: "system/user 필드 필요" });
+  if (!system || !user) return res.status(400).json({ error: "system/user ?�드 ?�요" });
 
   try {
     const response = await fetch("https://api.anthropic.com/v1/messages", {
@@ -16,7 +16,7 @@ export default async function handler(req, res) {
         "anthropic-version": "2023-06-01",
       },
       body: JSON.stringify({
-        model: "claude-sonnet-4-20250514",
+        model: "claude-sonnet-4-5",
         max_tokens: tokens,
         system,
         messages: [{ role: "user", content: user }],
@@ -31,10 +31,10 @@ export default async function handler(req, res) {
     const data = await response.json();
     const text = data.content?.map(b => b.text || "").join("") || "";
 
-    // JSON 안전 추출
+    // JSON ?�전 추출
     const cleaned = text.replace(/```json\s*/gi, "").replace(/```\s*/g, "").trim();
     const s = cleaned.indexOf("{"), e = cleaned.lastIndexOf("}");
-    if (s === -1 || e === -1) throw new Error("JSON을 찾을 수 없습니다");
+    if (s === -1 || e === -1) throw new Error("JSON??찾을 ???�습?�다");
     const parsed = JSON.parse(cleaned.slice(s, e + 1));
 
     return res.status(200).json({ success: true, data: parsed });
