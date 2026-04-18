@@ -48,7 +48,7 @@ export default async function handler(req, res) {
     const userMsg = `생년: ${year}년 ${month}월 ${day}일 ${hour ? hour + "시" : "시간 미상"}, 성별: ${gender}`;
 
     const message = await client.messages.create({
-      model: "claude-sonnet-4-20250514",
+      model: "claude-sonnet-4-5",
       max_tokens: 1024,
       system: SYSTEM_PROMPT,
       messages: [{ role: "user", content: userMsg }],
